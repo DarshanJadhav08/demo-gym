@@ -17,9 +17,28 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('apex_token'));
-  const [loading, setLoading] = useState<boolean>(true);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('apex_token') || 'demo_token_admin');
+  const [user, setUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('apex_user');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    // Default fallback demo user for presentation
+    return {
+      id: 'demo-admin-id',
+      username: 'admin',
+      email: 'admin@gymdemo.com',
+      role: 'admin',
+      first_name: 'Demo',
+      last_name: 'Admin',
+      status: 'active',
+    };
+  });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchCurrentUser = async () => {
     if (!token) {
@@ -29,29 +48,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     try {
       const res = await api.getMe();
-      setUser(res.user);
+      if (res && res.user) {
+        setUser(res.user);
+        localStorage.setItem('apex_user', JSON.stringify(res.user));
+      }
     } catch (err) {
-      console.error('Session expired or invalid:', err);
-      localStorage.removeItem('apex_token');
-      setToken(null);
-      setUser(null);
+      // Retain local demo user in static hosting mode
+      console.warn('API getMe unavailable, continuing with demo user session');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCurrentUser();
+    if (token && !user) {
+      fetchCurrentUser();
+    }
   }, [token]);
 
   const login = (newToken: string, newUser: User) => {
     localStorage.setItem('apex_token', newToken);
+    localStorage.setItem('apex_user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
   };
 
   const logout = () => {
     localStorage.removeItem('apex_token');
+    localStorage.removeItem('apex_user');
     setToken(null);
     setUser(null);
   };
