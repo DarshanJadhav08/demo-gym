@@ -1,145 +1,48 @@
+import {
+  MOCK_CUSTOMERS,
+  MOCK_TRAINERS,
+  MOCK_PLANS,
+  MOCK_PAYMENTS,
+  MOCK_APPLICATIONS,
+  MOCK_CUSTOMER_MEMBERSHIPS,
+  MOCK_ATTENDANCE_DATA,
+  MOCK_WORKOUTS,
+  MOCK_DIETS,
+  MOCK_ENQUIRIES,
+  MOCK_EXPENSES,
+  MOCK_DASHBOARD_SUMMARY,
+  MOCK_FINANCIAL_REPORT,
+  MOCK_SETTINGS,
+} from './mockData';
+
 const API_BASE = '/api';
 
-function getMockFallback(endpoint: string): any {
-  if (endpoint.includes('/reports/dashboard-summary')) {
-    return {
-      kpis: {
-        totalCustomers: 248,
-        activeMembers: 196,
-        inactiveMembers: 52,
-        totalTrainers: 14,
-        monthlyRevenue: 28450,
-        monthlyExpenses: 9800,
-        netProfit: 18650,
-        pendingPayments: 2450,
-        todayAttendance: 84,
-        newEnquiries: 19,
-      },
-      revenueChart: [
-        { month: 'Jan', revenue: 19400, expenses: 7800 },
-        { month: 'Feb', revenue: 21800, expenses: 8100 },
-        { month: 'Mar', revenue: 23600, expenses: 8400 },
-        { month: 'Apr', revenue: 25900, expenses: 8900 },
-        { month: 'May', revenue: 27100, expenses: 9300 },
-        { month: 'Jun', revenue: 28450, expenses: 9800 },
-      ],
-      planDistribution: [
-        { name: 'Elite Annual', value: 88 },
-        { name: 'Gold Half-Yearly', value: 64 },
-        { name: 'Silver Quarterly', value: 42 },
-        { name: 'Basic Monthly', value: 54 },
-      ],
-      recentPayments: [
-        { id: 'pay_1', receipt_number: 'RCP-1049', customer_name: 'Marcus Reeves', plan_name: 'Elite Annual VIP', amount: 999, payment_method: 'Card', status: 'completed', payment_date: 'Today, 10:45 AM' },
-        { id: 'pay_2', receipt_number: 'RCP-1048', customer_name: 'Elena Rostova', plan_name: 'Gold Half-Yearly', amount: 549, payment_method: 'UPI', status: 'completed', payment_date: 'Today, 09:12 AM' },
-        { id: 'pay_3', receipt_number: 'RCP-1047', customer_name: 'David Chen', plan_name: 'Silver Quarterly', amount: 299, payment_method: 'Cash', status: 'completed', payment_date: 'Yesterday' },
-      ],
-      recentEnquiries: [
-        { id: 'enq_1', full_name: 'Rohit Sharma', mobile_number: '+91 98200 11223', goal: 'Weight Loss & Hypertrophy', status: 'new', created_at: '15 mins ago' },
-        { id: 'enq_2', full_name: 'Priya Kapoor', mobile_number: '+91 99300 44556', goal: 'Personal Training', status: 'contacted', created_at: '1 hour ago' },
-        { id: 'enq_3', full_name: 'Arjun Verma', mobile_number: '+91 98111 77889', goal: 'Crossfit & Strength', status: 'scheduled', created_at: '3 hours ago' },
-      ],
-    };
-  }
-
-  if (endpoint.includes('/customers')) {
-    return {
-      customers: [
-        { id: 'c1', member_id: 'MEM-001', full_name: 'Marcus Reeves', mobile_number: '+91 98201 12345', email: 'marcus@demo.com', status: 'active', plan_name: 'Elite Annual VIP', expiry_date: '2027-11-20', joined_date: '2026-01-15' },
-        { id: 'c2', member_id: 'MEM-002', full_name: 'Elena Rostova', mobile_number: '+91 98202 23456', email: 'elena@demo.com', status: 'active', plan_name: 'Gold Half-Yearly', expiry_date: '2027-05-15', joined_date: '2026-02-10' },
-        { id: 'c3', member_id: 'MEM-003', full_name: 'David Chen', mobile_number: '+91 98203 34567', email: 'david@demo.com', status: 'active', plan_name: 'Silver Quarterly', expiry_date: '2027-02-28', joined_date: '2026-03-01' },
-        { id: 'c4', member_id: 'MEM-004', full_name: 'Sophia Patel', mobile_number: '+91 98204 45678', email: 'sophia@demo.com', status: 'inactive', plan_name: 'Bronze Monthly', expiry_date: '2026-10-15', joined_date: '2025-11-12' },
-      ],
-      total: 4,
-    };
-  }
-
-  if (endpoint.includes('/trainers')) {
-    return {
-      trainers: [
-        { id: 't1', trainer_code: 'TRN-01', full_name: 'Alex Vance', specialization: 'Strength & Hypertrophy', experience_years: 9, mobile_number: '+91 98333 11223', email: 'alex@demo.com', status: 'active' },
-        { id: 't2', trainer_code: 'TRN-02', full_name: 'Sarah Connor', specialization: 'Functional & HIIT', experience_years: 7, mobile_number: '+91 98333 44556', email: 'sarah@demo.com', status: 'active' },
-        { id: 't3', trainer_code: 'TRN-03', full_name: 'Vikram Singh', specialization: 'Olympic Lifting & Power', experience_years: 11, mobile_number: '+91 98333 77889', email: 'vikram@demo.com', status: 'active' },
-      ],
-      total: 3,
-    };
-  }
-
-  if (endpoint.includes('/memberships/plans')) {
-    return {
-      plans: [
-        { id: 'p1', name: 'Elite Annual VIP', price: 999, duration_months: 12, features: ['Unlimited 24/7 Access', 'Dedicated Master Trainer', 'Custom Nutrition Protocol', 'Spa & Recovery Lounge'], is_popular: true },
-        { id: 'p2', name: 'Gold Half-Yearly', price: 549, duration_months: 6, features: ['Full Gym & Classes', 'Quarterly Fitness Assessment', 'Steam & Sauna Access'], is_popular: false },
-        { id: 'p3', name: 'Silver Quarterly', price: 299, duration_months: 3, features: ['Peak Hours Gym Access', 'Locker & Shower Facility', '1 Trainer Intro Session'], is_popular: false },
-        { id: 'p4', name: 'Bronze Monthly', price: 119, duration_months: 1, features: ['Standard Gym Floor Access', 'Basic Equipment Access'], is_popular: false },
-      ]
-    };
-  }
-
-  if (endpoint.includes('/payments')) {
-    return {
-      payments: [
-        { id: 'pay_1', receipt_number: 'RCP-1049', customer_name: 'Marcus Reeves', plan_name: 'Elite Annual VIP', amount: 999, payment_method: 'Card', status: 'completed', payment_date: 'Today, 10:45 AM' },
-        { id: 'pay_2', receipt_number: 'RCP-1048', customer_name: 'Elena Rostova', plan_name: 'Gold Half-Yearly', amount: 549, payment_method: 'UPI', status: 'completed', payment_date: 'Today, 09:12 AM' },
-        { id: 'pay_3', receipt_number: 'RCP-1047', customer_name: 'David Chen', plan_name: 'Silver Quarterly', amount: 299, payment_method: 'Cash', status: 'completed', payment_date: 'Yesterday' },
-      ],
-      total: 3
-    };
-  }
-
-  if (endpoint.includes('/attendance')) {
-    return {
-      records: [
-        { id: 'att_1', customer_name: 'Marcus Reeves', check_in: '07:30 AM', check_out: '09:15 AM', status: 'completed' },
-        { id: 'att_2', customer_name: 'Elena Rostova', check_in: '08:15 AM', check_out: null, status: 'in-gym' },
-        { id: 'att_3', customer_name: 'David Chen', check_in: '09:00 AM', check_out: null, status: 'in-gym' },
-      ],
-      todayCount: 84
-    };
-  }
-
-  if (endpoint.includes('/auth/me')) {
-    const saved = localStorage.getItem('apex_user');
-    return {
-      user: saved ? JSON.parse(saved) : {
-        id: 'usr_demo_admin',
-        username: 'admin',
-        email: 'admin@gymdemo.com',
-        role: 'admin',
-        first_name: 'Demo',
-        last_name: 'Admin',
-      }
-    };
-  }
-
-  if (endpoint.includes('/auth/login')) {
-    return {
-      token: 'demo_token_admin',
-      user: {
-        id: 'usr_demo_admin',
-        username: 'admin',
-        email: 'admin@gymdemo.com',
-        role: 'admin',
-        first_name: 'Demo',
-        last_name: 'Admin',
-      }
-    };
-  }
-
-  return { success: true, data: [] };
-}
+// In-memory demo state that supports adding/updating during a demo session
+let localCustomers = [...MOCK_CUSTOMERS];
+let localTrainers = [...MOCK_TRAINERS];
+let localPlans = [...MOCK_PLANS];
+let localPayments = [...MOCK_PAYMENTS];
+let localAttendance = { ...MOCK_ATTENDANCE_DATA, records: [...MOCK_ATTENDANCE_DATA.records] };
+let localWorkouts = [...MOCK_WORKOUTS];
+let localDiets = [...MOCK_DIETS];
+let localEnquiries = [...MOCK_ENQUIRIES];
+let localExpenses = [...MOCK_EXPENSES];
+let localSettings = { ...MOCK_SETTINGS };
+let localApplications = [...MOCK_APPLICATIONS];
+let localCustomerMemberships = [...MOCK_CUSTOMER_MEMBERSHIPS];
 
 export async function apiRequest<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('apex_token');
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(options.headers as Record<string, string> || {}),
+    ...((options.headers as Record<string, string>) || {}),
   };
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
+  // 1. Try real backend first if available
   try {
     const response = await fetch(`${API_BASE}${endpoint}`, {
       ...options,
@@ -151,10 +54,332 @@ export async function apiRequest<T = any>(endpoint: string, options: RequestInit
       return data as T;
     }
   } catch (err) {
-    // Backend server unavailable (Static site deployment) - fallback seamlessly to mock data
+    // Network / backend unavailable -> proceed to rich demo mock fallback
   }
 
-  return getMockFallback(endpoint) as T;
+  // 2. Comprehensive Demo Mock Fallback (Guaranteed to return the exact data structure expected by every page)
+  return getMockEndpointData(endpoint, options) as T;
+}
+
+function getMockEndpointData(endpoint: string, options: RequestInit = {}): any {
+  const method = (options.method || 'GET').toUpperCase();
+  const body = options.body ? JSON.parse(options.body as string) : {};
+
+  // Auth Endpoints
+  if (endpoint.startsWith('/auth/login') || endpoint.startsWith('/auth/register')) {
+    const userRole = (body.email || '').includes('trainer')
+      ? 'trainer'
+      : (body.email || '').includes('customer') || (body.email || '').includes('member')
+      ? 'customer'
+      : 'admin';
+
+    const userObj = {
+      id: 'usr_demo_' + userRole,
+      username: userRole,
+      email: body.email || `${userRole}@gymdemo.com`,
+      role: userRole,
+      first_name: userRole === 'admin' ? 'Demo' : userRole === 'trainer' ? 'Alex' : 'Marcus',
+      last_name: userRole === 'admin' ? 'Admin' : userRole === 'trainer' ? 'Vance' : 'Reeves',
+      status: 'active',
+    };
+    return { token: 'demo_token_' + userRole, user: userObj };
+  }
+
+  if (endpoint.startsWith('/auth/me')) {
+    const saved = localStorage.getItem('apex_user');
+    return {
+      user: saved
+        ? JSON.parse(saved)
+        : {
+            id: 'usr_demo_admin',
+            username: 'admin',
+            email: 'admin@gymdemo.com',
+            role: 'admin',
+            first_name: 'Demo',
+            last_name: 'Admin',
+            status: 'active',
+          },
+    };
+  }
+
+  // Dashboard Summary (Admin Dashboard)
+  if (endpoint.startsWith('/reports/dashboard-summary')) {
+    return MOCK_DASHBOARD_SUMMARY;
+  }
+
+  // Financial Report
+  if (endpoint.startsWith('/reports/financial')) {
+    return MOCK_FINANCIAL_REPORT;
+  }
+
+  // Customers Management (/admin/customers)
+  if (endpoint.startsWith('/customers')) {
+    if (method === 'POST') {
+      const newCust = {
+        ...body,
+        id: 'cust_' + (localCustomers.length + 1),
+        customer_code: 'MEM-' + String(localCustomers.length + 1).padStart(3, '0'),
+        trainer_name: localTrainers.find((t) => t.id === body.assigned_trainer_id)?.full_name || 'Alex Vance',
+        plan_name: localPlans.find((p) => p.id === body.membership_plan_id)?.name || 'Elite Annual VIP',
+        membership_status: 'active',
+        membership_end_date: '2027-11-20',
+        outstanding_balance: 0,
+      };
+      localCustomers.unshift(newCust);
+      return newCust;
+    }
+
+    // Single customer detail by ID: /customers/:id
+    const idMatch = endpoint.match(/\/customers\/([^?]+)/);
+    if (idMatch && idMatch[1] && !endpoint.includes('?')) {
+      const targetId = idMatch[1];
+      const found = localCustomers.find((c) => c.id === targetId || c.customer_code === targetId);
+      if (found) {
+        return {
+          ...found,
+          memberships: found.memberships || localCustomerMemberships.slice(0, 2),
+          payments: found.payments || localPayments.slice(0, 3),
+          attendance: found.attendance || localAttendance.records.slice(0, 4),
+          workouts: found.workouts || localWorkouts.slice(0, 1),
+          diets: found.diets || localDiets.slice(0, 1),
+        };
+      }
+      return localCustomers[0];
+    }
+
+    // List of customers: expects { customers: [...], total: ... }
+    return {
+      customers: localCustomers,
+      total: localCustomers.length,
+    };
+  }
+
+  // Trainers Management (/admin/trainers) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/trainers')) {
+    if (method === 'POST') {
+      const newTrn = {
+        ...body,
+        id: 'trn_' + (localTrainers.length + 1),
+        trainer_code: 'TRN-' + String(localTrainers.length + 1).padStart(3, '0'),
+        joining_date: new Date().toISOString().split('T')[0],
+      };
+      localTrainers.push(newTrn);
+      return newTrn;
+    }
+
+    const idMatch = endpoint.match(/\/trainers\/([^?]+)/);
+    if (idMatch && idMatch[1] && !endpoint.includes('?')) {
+      return localTrainers.find((t) => t.id === idMatch[1]) || localTrainers[0];
+    }
+
+    return localTrainers; // Return ARRAY directly
+  }
+
+  // Memberships Management (/admin/memberships) -> EXPECTS ARRAYS!
+  if (endpoint.startsWith('/memberships/plans')) {
+    if (method === 'POST') {
+      const newPlan = {
+        ...body,
+        id: 'plan_' + (localPlans.length + 1),
+        slug: (body.name || 'new-plan').toLowerCase().replace(/\s+/g, '-'),
+        duration_days: (body.duration_months || 1) * 30,
+        benefits: JSON.stringify(body.benefits || ['Gym Access']),
+        features: JSON.stringify(body.features || ['Full Access']),
+        discount_percentage: 0,
+        joining_fee: 0,
+        is_active: 1,
+        is_featured: 0,
+      };
+      localPlans.push(newPlan);
+      return newPlan;
+    }
+    return localPlans; // Return ARRAY directly
+  }
+
+  if (endpoint.startsWith('/memberships/applications')) {
+    if (endpoint.includes('/review') && method === 'PUT') {
+      return { success: true, message: 'Application reviewed' };
+    }
+    return localApplications; // Return ARRAY directly
+  }
+
+  if (endpoint.startsWith('/memberships/customer-memberships')) {
+    return localCustomerMemberships; // Return ARRAY directly
+  }
+
+  if (endpoint.startsWith('/memberships/assign')) {
+    return { success: true, message: 'Membership assigned' };
+  }
+
+  // Payments Management (/admin/payments) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/payments')) {
+    if (method === 'POST') {
+      const newPayment = {
+        ...body,
+        id: 'pay_' + (localPayments.length + 1),
+        receipt_number: 'RCP-' + (1050 + localPayments.length),
+        payment_date: new Date().toLocaleString(),
+        status: 'completed',
+        customer_name: localCustomers.find((c) => c.id === body.customer_id)?.full_name || 'Marcus Reeves',
+        plan_name: 'Gym Package',
+      };
+      localPayments.unshift(newPayment);
+      return newPayment;
+    }
+    return localPayments; // Return ARRAY directly
+  }
+
+  // Attendance Management (/admin/attendance)
+  if (endpoint.startsWith('/attendance/today')) {
+    return localAttendance; // Returns { records: [...], stats: {...} }
+  }
+
+  if (endpoint.startsWith('/attendance/history')) {
+    return localAttendance.records; // Returns ARRAY
+  }
+
+  if (endpoint.startsWith('/attendance/check-in')) {
+    const person =
+      body.entity_type === 'trainer'
+        ? localTrainers.find((t) => t.id === body.trainer_id)
+        : localCustomers.find((c) => c.id === body.customer_id);
+
+    const newRecord = {
+      id: 'att_' + (localAttendance.records.length + 1),
+      entity_type: body.entity_type || 'customer',
+      person_name: person ? person.full_name : 'Customer Member',
+      person_code: (person as any)?.customer_code || (person as any)?.trainer_code || 'MEM-009',
+      attendance_date: new Date().toISOString().split('T')[0],
+      check_in_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      check_out_time: null,
+      status: 'present',
+      notes: body.notes || 'Workout Session',
+    };
+    localAttendance.records.unshift(newRecord);
+    localAttendance.stats.presentCount += 1;
+    return newRecord;
+  }
+
+  if (endpoint.startsWith('/attendance/check-out')) {
+    return { success: true, message: 'Checked out successfully' };
+  }
+
+  // Workouts Management (/admin/workouts) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/workouts')) {
+    if (method === 'POST') {
+      const newW = {
+        id: 'w_' + (localWorkouts.length + 1),
+        plan_name: body.plan?.plan_name || 'Custom Workout Plan',
+        category: body.plan?.category || 'Strength Training',
+        difficulty: body.plan?.difficulty || 'Intermediate',
+        duration_weeks: body.plan?.duration_weeks || 8,
+        description: body.plan?.description || 'Custom coach programming.',
+        trainer_name: 'Alex Vance',
+        exercises: body.exercises || [],
+      };
+      localWorkouts.push(newW);
+      return newW;
+    }
+    return localWorkouts; // Return ARRAY directly
+  }
+
+  // Diets Management (/admin/diets) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/diets')) {
+    if (method === 'POST') {
+      const newD = {
+        ...body,
+        id: 'd_' + (localDiets.length + 1),
+      };
+      localDiets.push(newD);
+      return newD;
+    }
+    return localDiets; // Return ARRAY directly
+  }
+
+  // Enquiries Management (/admin/enquiries) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/enquiries')) {
+    if (endpoint.includes('/status') && method === 'PUT') {
+      return { success: true, message: 'Status updated' };
+    }
+    if (endpoint.includes('/convert') && method === 'POST') {
+      return { success: true, message: 'Enquiry converted to customer' };
+    }
+    return localEnquiries; // Return ARRAY directly
+  }
+
+  // Expenses Management (/admin/expenses) -> EXPECTS ARRAY!
+  if (endpoint.startsWith('/expenses')) {
+    if (method === 'POST') {
+      const newExp = {
+        ...body,
+        id: 'exp_' + (localExpenses.length + 1),
+        created_by: 'Admin',
+      };
+      localExpenses.unshift(newExp);
+      return newExp;
+    }
+    return localExpenses; // Return ARRAY directly
+  }
+
+  // Gym Settings (/admin/settings)
+  if (endpoint.startsWith('/content/settings')) {
+    if (method === 'PUT') {
+      localSettings = { ...localSettings, ...body };
+      return localSettings;
+    }
+    return localSettings;
+  }
+
+  // Public Home Data
+  if (endpoint.startsWith('/content/home-data')) {
+    return {
+      trainers: localTrainers,
+      plans: localPlans,
+      programs: [
+        { id: 'prog_1', title: 'Hypertrophy & Bodybuilding', duration: '12 Weeks', level: 'Intermediate', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=600' },
+        { id: 'prog_2', title: 'Olympic Weightlifting', duration: '8 Weeks', level: 'Advanced', image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600' },
+        { id: 'prog_3', title: 'Functional HIIT & Stamina', duration: '6 Weeks', level: 'All Levels', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&q=80&w=600' },
+      ],
+      testimonials: [
+        { id: 'test_1', name: 'Marcus Reeves', role: 'Executive & Athlete', rating: 5, comment: 'Best fitness atmosphere and equipment in town. Transformed my physique in 6 months.' },
+        { id: 'test_2', name: 'Elena Rostova', role: 'Fitness Enthusiast', rating: 5, comment: 'Trainers are certified, knowledgeable, and the facilities are world-class.' },
+      ],
+      settings: localSettings,
+    };
+  }
+
+  // Customer Portal
+  if (endpoint.startsWith('/portal/customer/me')) {
+    return {
+      customer: localCustomers[0],
+      activeMembership: localCustomerMemberships[0],
+      qrPass: 'DEMOFIT-MEM-001',
+      recentAttendance: localAttendance.records.slice(0, 5),
+      activeWorkout: localWorkouts[0],
+      activeDiet: localDiets[0],
+      paymentHistory: localPayments.slice(0, 2),
+    };
+  }
+
+  // Trainer Portal
+  if (endpoint.startsWith('/portal/trainer/me')) {
+    return {
+      trainer: localTrainers[0],
+      assignedClients: localCustomers.slice(0, 3),
+      todaySchedule: [
+        { time: '07:00 AM', client: 'Marcus Reeves', type: '1-on-1 Hypertrophy', status: 'completed' },
+        { time: '09:00 AM', client: 'David Chen', type: 'Strength Conditioning', status: 'upcoming' },
+        { time: '11:00 AM', client: 'Floor Coaching', type: 'Gym Floor Duty', status: 'upcoming' },
+      ],
+      stats: {
+        totalClients: 18,
+        activeWorkouts: 12,
+        dietsAssigned: 15,
+      },
+    };
+  }
+
+  return [];
 }
 
 export const api = {
