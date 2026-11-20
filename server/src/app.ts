@@ -31,8 +31,12 @@ async function bootstrap() {
   await registerRoutes(app);
 
   // Serve Client Static Build if available
-  const clientDist = path.resolve(process.cwd(), '..', 'client', 'dist');
-  if (fs.existsSync(clientDist)) {
+  const clientDistCandidates = [
+    path.resolve(process.cwd(), 'client', 'dist'),
+    path.resolve(process.cwd(), '..', 'client', 'dist'),
+  ];
+  const clientDist = clientDistCandidates.find((p) => fs.existsSync(p));
+  if (clientDist) {
     await app.register(fastifyStatic, {
       root: clientDist,
       prefix: '/',

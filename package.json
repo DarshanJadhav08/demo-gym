@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "description": "Complete Premium Gym Website & Integrated Gym Management System",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start": "cd server && npx tsx src/app.ts",
     "dev": "cd server && npx tsx watch src/app.ts",
     "dev:client": "cd client && npx vite",
     "build": "cd client && npx vite build",
     "seed": "cd server && npx tsx src/database/seed.ts",
-    "test": "cd server && npx tsx src/tests/integration.test.ts"
+    "test": "cd server && npx tsx src/tests/integration.test.ts",
+    "render-build": "npm install --prefix client && npm run build && npm install --prefix server && npm run seed"
   }
 }
