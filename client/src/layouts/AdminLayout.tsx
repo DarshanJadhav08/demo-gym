@@ -56,7 +56,7 @@ export const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#080811] text-white flex">
+    <div className="h-screen w-full overflow-hidden bg-[#080811] text-white flex">
       {/* Mobile Sidebar Backdrop */}
       {mobileOpen && (
         <div
@@ -65,9 +65,9 @@ export const AdminLayout: React.FC = () => {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Fixed Sticky Sidebar - Never scrolls with page */}
       <aside
-        className={`fixed lg:static top-0 bottom-0 left-0 z-50 bg-[#10101C] border-r border-[#E91E63]/20 flex flex-col transition-all duration-300 ${
+        className={`fixed lg:sticky top-0 h-screen z-50 bg-[#10101C] border-r border-[#E91E63]/20 flex flex-col shrink-0 transition-all duration-300 ${
           collapsed ? 'w-20' : 'w-64'
         } ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
@@ -145,8 +145,8 @@ export const AdminLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* Main Content Area - Fixed Header, Scrollable Main Viewport */}
+      <div className="flex-1 h-screen flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-16 bg-[#10101C]/90 backdrop-blur-md border-b border-[#E91E63]/20 px-4 sm:px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">

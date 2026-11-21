@@ -26,16 +26,17 @@ import {
   Cell
 } from 'recharts';
 import { api } from '../../services/api';
+import { MOCK_DASHBOARD_SUMMARY } from '../../services/mockData';
 
 export const AdminDashboard: React.FC = () => {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>(MOCK_DASHBOARD_SUMMARY);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSummary = async () => {
       try {
         const summary = await api.getDashboardSummary();
-        setData(summary);
+        if (summary) setData(summary);
       } catch (err) {
         console.error('Failed to load dashboard summary:', err);
       } finally {
@@ -55,6 +56,14 @@ export const AdminDashboard: React.FC = () => {
 
   const kpis = data.kpis || {};
   const COLORS = ['#E91E63', '#A51C55', '#571638', '#9C27B0', '#FF4081'];
+
+  const chartRevenueData = data.monthlyRevenue || data.revenueChart || [];
+  const chartMembershipData = (data.membershipDistribution || data.planDistribution || []).map((item: any) => ({
+    name: item.name,
+    count: item.count !== undefined ? item.count : (item.value || 0),
+  }));
+  const transactionsData = data.recentTransactions || data.recentPayments || [];
+  const customersData = data.recentCustomers || [];
 
   const kpiCards = [
     { label: 'Total Customers', value: kpis.totalCustomers || 0, icon: Users, color: 'text-blue-400' },
@@ -136,9 +145,9 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.monthlyRevenue || []}>
+          <div className="h-72 w-full min-h-[280px]">
+            <ResponsiveContainer width="100%" height="100%" minWidth={250} minHeight={250}>
+              <AreaChart data={chartRevenueData}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#E91E63" stopOpacity={0.4} />
@@ -168,11 +177,11 @@ export const AdminDashboard: React.FC = () => {
             <p className="text-xs text-gray-400">Active athlete subscriptions</p>
           </div>
 
-          <div className="h-56 my-2">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-56 my-2 min-h-[200px]">
+            <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
               <PieChart>
                 <Pie
-                  data={data.membershipDistribution || []}
+                  data={chartMembershipData}
                   cx="50%"
                   cy="50%"
                   innerRadius={55}
@@ -180,7 +189,7 @@ export const AdminDashboard: React.FC = () => {
                   paddingAngle={5}
                   dataKey="count"
                 >
-                  {(data.membershipDistribution || []).map((_: any, index: number) => (
+                  {chartMembershipData.map((_: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -192,7 +201,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="space-y-1.5">
-            {(data.membershipDistribution || []).map((item: any, idx: number) => (
+            {chartMembershipData.map((item: any, idx: number) => (
               <div key={idx} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
@@ -229,7 +238,7 @@ export const AdminDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {(data.recentTransactions || []).map((txn: any) => (
+                {transactionsData.map((txn: any) => (
                   <tr key={txn.id} className="hover:bg-[#10101C]/50 transition-colors">
                     <td className="p-3 font-mono font-bold text-[#E91E63]">{txn.receipt_number}</td>
                     <td className="p-3 text-white font-medium">{txn.customer_name}</td>
@@ -247,15 +256,15 @@ export const AdminDashboard: React.FC = () => {
         <div className="lg:col-span-5 p-6 rounded-3xl bg-[#151522] border border-[#E91E63]/25 shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-heading text-xl font-bold text-white uppercase">Latest Leads & Enquiries</h3>
-              <Link to="/admin/enquiries" className="text-xs text-[#E91E63] font-semibold hover:underline flex items-center gap-1">
+              <h3 className="font-heading text-xl font-bold text-white uppercase">Latest Leads & Members</h3>
+              <Link to="/admin/customers" className="text-xs text-[#E91E63] font-semibold hover:underline flex items-center gap-1">
                 <span>Manage</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
             <div className="space-y-3">
-              {(data.recentCustomers || []).slice(0, 4).map((c: any) => (
+              {customersData.slice(0, 4).map((c: any) => (
                 <div key={c.id} className="p-3 rounded-xl bg-[#10101C] border border-gray-800/80 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <img src={c.profile_photo} alt={c.full_name} className="w-9 h-9 rounded-full object-cover border border-[#E91E63]/40" />

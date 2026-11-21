@@ -687,6 +687,14 @@ export const MOCK_DASHBOARD_SUMMARY = {
     todayAttendance: 84,
     newEnquiries: 19,
   },
+  monthlyRevenue: [
+    { month: 'Jun', revenue: 19400, expenses: 7800 },
+    { month: 'Jul', revenue: 21800, expenses: 8100 },
+    { month: 'Aug', revenue: 23600, expenses: 8400 },
+    { month: 'Sep', revenue: 25900, expenses: 8900 },
+    { month: 'Oct', revenue: 27100, expenses: 9300 },
+    { month: 'Nov', revenue: 28450, expenses: 9800 },
+  ],
   revenueChart: [
     { month: 'Jun', revenue: 19400, expenses: 7800 },
     { month: 'Jul', revenue: 21800, expenses: 8100 },
@@ -695,20 +703,33 @@ export const MOCK_DASHBOARD_SUMMARY = {
     { month: 'Oct', revenue: 27100, expenses: 9300 },
     { month: 'Nov', revenue: 28450, expenses: 9800 },
   ],
-  planDistribution: [
-    { name: 'Elite Annual', value: 88 },
-    { name: 'Gold Half-Yearly', value: 64 },
-    { name: 'Silver Quarterly', value: 42 },
-    { name: 'Basic Monthly', value: 54 },
+  membershipDistribution: [
+    { name: 'Elite Annual VIP', count: 88, value: 88 },
+    { name: 'Gold Half-Yearly', count: 64, value: 64 },
+    { name: 'Silver Quarterly', count: 42, value: 42 },
+    { name: 'Bronze Monthly', count: 54, value: 54 },
   ],
-  recentPayments: MOCK_PAYMENTS.slice(0, 4),
+  planDistribution: [
+    { name: 'Elite Annual VIP', count: 88, value: 88 },
+    { name: 'Gold Half-Yearly', count: 64, value: 64 },
+    { name: 'Silver Quarterly', count: 42, value: 42 },
+    { name: 'Bronze Monthly', count: 54, value: 54 },
+  ],
+  recentTransactions: MOCK_PAYMENTS.slice(0, 5),
+  recentPayments: MOCK_PAYMENTS.slice(0, 5),
+  recentCustomers: MOCK_CUSTOMERS.slice(0, 4),
   recentEnquiries: MOCK_ENQUIRIES.slice(0, 3),
 };
 
 export const MOCK_FINANCIAL_REPORT = {
+  totalRevenue: 146250,
+  totalExpenses: 52300,
+  netProfit: 93950,
+  profitMargin: '64.2%',
   kpis: {
     totalRevenue: 146250,
     totalExpenses: 52300,
+    netProfit: 93950,
     netIncome: 93950,
     profitMargin: '64.2%',
   },
