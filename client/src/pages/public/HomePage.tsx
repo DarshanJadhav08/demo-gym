@@ -152,7 +152,7 @@ export const HomePage: React.FC = () => {
 
       {/* Membership Pricing Section */}
       <PricingSection
-        plans={homeData.membershipPlans}
+        plans={homeData.membershipPlans || homeData.plans}
         onOpenJoinModal={handleOpenJoinModal}
       />
 

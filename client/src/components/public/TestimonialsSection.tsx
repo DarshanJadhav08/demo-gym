@@ -51,39 +51,50 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
 
         {/* Testimonials Grid / Carousel */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {list.map((item, idx) => (
-            <div
-              key={idx}
-              className="p-8 rounded-3xl bg-[#151522] border border-[#E91E63]/25 hover:border-[#E91E63]/60 transition-all duration-300 shadow-xl flex flex-col justify-between"
-            >
-              <div>
-                {/* Review text */}
-                <p className="text-sm text-[#B8B5C2] leading-relaxed italic mb-6">
-                  "{item.review}"
-                </p>
+          {list.map((item, idx) => {
+            const fallback = defaultTestimonials[idx % defaultTestimonials.length];
+            const review = item.review || item.comment || fallback.review;
+            const customerName = item.customer_name || item.name || fallback.customer_name;
+            const membershipType = item.membership_type || item.role || fallback.membership_type;
+            const customerImage = item.customer_image || item.image || item.avatar_url || fallback.customer_image;
 
-                {/* Rating Stars */}
-                <div className="flex gap-1 mb-6 text-amber-400">
-                  {Array.from({ length: item.rating || 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-              </div>
-
-              {/* Author Info */}
-              <div className="flex items-center gap-4 pt-4 border-t border-gray-800">
-                <img
-                  src={item.customer_image}
-                  alt={item.customer_name}
-                  className="w-12 h-12 rounded-full object-cover border border-[#E91E63]"
-                />
+            return (
+              <div
+                key={item.id || idx}
+                className="p-8 rounded-3xl bg-[#151522] border border-[#E91E63]/25 hover:border-[#E91E63]/60 transition-all duration-300 shadow-xl flex flex-col justify-between"
+              >
                 <div>
-                  <h4 className="font-semibold text-white text-sm">{item.customer_name}</h4>
-                  <p className="text-xs text-[#E91E63]">{item.membership_type}</p>
+                  {/* Review text */}
+                  <p className="text-sm text-[#B8B5C2] leading-relaxed italic mb-6">
+                    "{review}"
+                  </p>
+
+                  {/* Rating Stars */}
+                  <div className="flex gap-1 mb-6 text-amber-400">
+                    {Array.from({ length: item.rating || 5 }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-4 pt-4 border-t border-gray-800">
+                  <img
+                    src={customerImage}
+                    alt={customerName}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = fallback.customer_image;
+                    }}
+                    className="w-12 h-12 rounded-full object-cover border border-[#E91E63] shrink-0"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-white text-sm">{customerName}</h4>
+                    <p className="text-xs text-[#E91E63]">{membershipType}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

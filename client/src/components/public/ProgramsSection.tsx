@@ -68,56 +68,66 @@ export const ProgramsSection: React.FC<ProgramsSectionProps> = ({
 
         {/* 3 Featured Program Cards (Matching reference layout) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {displayPrograms.slice(0, 3).map((prog, idx) => (
-            <div
-              key={prog.id || idx}
-              className="bg-[#151522] rounded-2xl overflow-hidden border border-[#E91E63]/30 hover:border-[#E91E63] transition-all duration-300 hover:-translate-y-1.5 group shadow-xl flex flex-col justify-between"
-            >
-              <div>
-                {/* Image */}
-                <div className="relative h-48 sm:h-52 overflow-hidden">
-                  <img
-                    src={prog.image_url}
-                    alt={prog.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#151522] via-transparent to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded bg-[#E91E63] text-white text-[11px] font-bold uppercase tracking-wider">
-                      {prog.category || 'PROGRAM'}
-                    </span>
+          {displayPrograms.slice(0, 3).map((prog, idx) => {
+            const fallbackItem = defaultPrograms[idx % defaultPrograms.length];
+            const programImage = prog.image_url || prog.image || fallbackItem.image_url;
+            const programCategory = prog.category || 'PROGRAM';
+            const programDesc = prog.description || fallbackItem.description;
+
+            return (
+              <div
+                key={prog.id || idx}
+                className="bg-[#151522] rounded-2xl overflow-hidden border border-[#E91E63]/30 hover:border-[#E91E63] transition-all duration-300 hover:-translate-y-1.5 group shadow-xl flex flex-col justify-between"
+              >
+                <div>
+                  {/* Image */}
+                  <div className="relative h-48 sm:h-52 overflow-hidden bg-gray-900">
+                    <img
+                      src={programImage}
+                      alt={prog.title}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = fallbackItem.image_url;
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#151522] via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 rounded bg-[#E91E63] text-white text-[11px] font-bold uppercase tracking-wider">
+                        {programCategory}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5 sm:p-6">
+                    <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2.5 group-hover:text-[#E91E63] transition-colors">
+                      {prog.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#B8B5C2] leading-relaxed line-clamp-3 mb-5">
+                      {programDesc}
+                    </p>
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-5 sm:p-6">
-                  <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2.5 group-hover:text-[#E91E63] transition-colors">
-                    {prog.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#B8B5C2] leading-relaxed line-clamp-3 mb-5">
-                    {prog.description}
-                  </p>
+                {/* Action */}
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-2 border-t border-gray-800/60 flex items-center justify-between">
+                  <button
+                    onClick={() => onSelectProgram(prog)}
+                    className="text-xs sm:text-sm font-semibold text-[#E91E63] hover:text-white flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => onOpenJoinModal()}
+                    className="px-3.5 py-1.5 rounded-lg bg-[#E91E63]/20 border border-[#E91E63]/40 text-xs text-white hover:bg-[#E91E63] transition-colors font-semibold"
+                  >
+                    Join Program
+                  </button>
                 </div>
               </div>
-
-              {/* Action */}
-              <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-2 border-t border-gray-800/60 flex items-center justify-between">
-                <button
-                  onClick={() => onSelectProgram(prog)}
-                  className="text-xs sm:text-sm font-semibold text-[#E91E63] hover:text-white flex items-center gap-1.5 transition-colors"
-                >
-                  <span>Learn More</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => onOpenJoinModal()}
-                  className="px-3.5 py-1.5 rounded-lg bg-[#E91E63]/20 border border-[#E91E63]/40 text-xs text-white hover:bg-[#E91E63] transition-colors font-semibold"
-                >
-                  Join Program
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
